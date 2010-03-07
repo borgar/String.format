@@ -1,12 +1,11 @@
 /*
  *  Python style string formatting for javascript
  *
- *  Version 1.0b
- *  10.06.2009
- *  URL: http://borgar.net/svn/public/trunk/javascript/date.format/
- *  Description: Provides Python style string formatting for javascript as outlined here: http://docs.python.org/library/stdtypes.html#string-formatting-operations
+ *  Version 1.0
+ *  URL: http://github.com/borgar/stringformat/
+ *  Description: Provides Python style string formatting for JavaScript as outlined here: http://docs.python.org/library/stdtypes.html#string-formatting-operations
  *  Author: Borgar Þorsteinsson
- *  Copyright: Copyright (c) 2009 Borgar Þorsteinsson under dual MIT/GPL license.
+ *  Copyright: Copyright (c) 2009-2010 Borgar Þorsteinsson under dual MIT/GPL license.
  *
  */
 /*global String */
@@ -250,13 +249,11 @@
 
   // Obsolete type – it is identical to 'd'.
   convert['u'] = convert['d'];
-  // dunno what the difference is betw. i and d?
+  // Dunno what the difference is betw. i and d?
   convert['i'] = convert['d'];
 
-
-  // python seems also to have p and z? 
+  // Python seems also to have p and z? 
   var CHUNKER = /^%(?:\(([^)]*?)\))?([ 0#+\-]+)?(\d+|\*)?(\.\d*|\*)?([hlL])?([diouxefgcrs%])/i;
-
 
   // 
   function format ( subject, args ) {
@@ -264,9 +261,9 @@
     // subject may be a string and nothing else
     subject = String( subject );
 
-    // if args is a single string, turn it into an array
+    // sugar: if args is a single string, turn it into an array
     args = ( getType(args) !== 'array' ) ? [ args ] : args;
-    // if args is an array in array - we'll peel the outer one off
+    // sugar: if args is an array in array - we'll peel the outer one off
     args = ( args.length == 1 && getType(args[0]) == 'array' ) ? args[0] : args;
     
     var res = '';
@@ -300,7 +297,7 @@
           // element of the tuple in values, and the object to convert comes after the 
           // minimum field width and optional precision.
           if ( m[3] == '*' ) {
-            if ( m[1] ) { throw '* expects int'; }  // key & read don't mix
+            if ( m[1] ) { throw '* expects a number'; }  // key & read don't mix
             o.minwidth = args[ a++ ];
           }
           else if ( m[3] ) {
@@ -315,7 +312,7 @@
           // element of the tuple in values, and the value to convert comes after the 
           // precision.
           if ( m[4] == '*' ) {
-            if ( m[1] ) { throw '* expects int'; }  // key & read don't mix
+            if ( m[1] ) { throw '* expects a number'; }  // key & read don't mix
             o.precision = args[ a++ ];
           }
           else if ( m[4] ) {
@@ -333,7 +330,7 @@
 
           i += m[0].length - 1;
 
-          // fixme: if we're out of characters then we need to throw exception
+          // FIXME: if we're out of characters then we need to throw exception
 
         } 
         else {
