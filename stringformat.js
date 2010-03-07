@@ -5,7 +5,7 @@
  *  URL: http://github.com/borgar/stringformat/
  *  Description: Provides Python style string formatting for JavaScript as outlined here: http://docs.python.org/library/stdtypes.html#string-formatting-operations
  *  Author: Borgar Þorsteinsson
- *  Copyright: Copyright (c) 2009-2010 Borgar Þorsteinsson under dual MIT/GPL license.
+ *  Copyright: Copyright (c) 2009-2010 Borgar Þorsteinsson under dual MIT license.
  *
  */
 /*global String */
