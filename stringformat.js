@@ -11,15 +11,15 @@
 /*global String */
 (function () {
   
-  function int ( n ) {
+  function _int ( n ) {
     return parseInt( n, 10 );
   }
 
-  function float ( n ) {
+  function _float ( n ) {
     return parseFloat( n, 10 );
   }
 
-  function has ( s, c ) {
+  function _has ( s, c ) {
     return !!s && s.indexOf( c ) !== -1;
   }
 
@@ -88,7 +88,7 @@
 
     // Signed integer decimal.
     'd': function ( v, o ) {
-      var i = int( v ),
+      var i = _int( v ),
           n = Math.abs( i ),
           s = sign( i, o.sign, o.space ),
           w = ( o.pad == '0' )
@@ -104,7 +104,7 @@
       // inserted between left-hand padding and the formatting
       // of the number if the leading character of the result
       // is not already a zero.
-      var i = int( v ),
+      var i = _int( v ),
           n = Math.abs( i ).toString( 8 ),
           s = sign( i, o.sign, o.space ),
           a = ( o.alt ? '0' : '' ),
@@ -112,7 +112,7 @@
                 ? Math.max( !!o.precision, (o.minwidth||0)-s.length-a.length ) // -1 - -1 = error!!
                 : o.precision,
           p = getPadding( n, w, '0' );
-      if ( p[0] === '0' || n[0] === '0' ) {
+      if ( p.charAt(0) === '0' || n.charAt(0) === '0' ) {
         a = '';
       }
       return pad( s + a + p + n, o.minwidth, o.pad );
@@ -123,7 +123,7 @@
       // The alternate form causes a leading '0x' to be inserted between 
       // left-hand padding and the formatting of the number if the leading 
       // character of the result is not already a zero.
-      var i = int( v ),
+      var i = _int( v ),
           n = Math.abs( i ).toString( 16 ),
           s = sign( i, o.sign, o.space ),
           a = ( o.alt ? '0x' : '' ),
@@ -141,7 +141,7 @@
       // The precision determines the number of digits after the 
       // decimal point and defaults to 6.
       
-      var i = float( v ),
+      var i = _float( v ),
           p = ( o.precision == null ) ? 6 : o.precision,
           n = Math.abs( i ).toExponential( p ).split('e+'),
           s = sign( i, o.sign, o.space );
@@ -156,7 +156,7 @@
       // decimal point, even if no digits follow it.
       // The precision determines the number of digits after the 
       // decimal point and defaults to 6.
-      var i = float( v ),
+      var i = _float( v ),
           // Python: For safety reasons, floating point precisions are clipped to 50; 
           // BT: shouldn't cause problems in JS as numbers don't reach that far. 
           p = ( o.precision == null ) ? 6 : Math.min( Math.abs( o.precision ), 50 )
@@ -185,7 +185,7 @@
       // and trailing zeroes are not removed as they would otherwise be.
       // The precision determines the number of significant digits before and 
       // after the decimal point and defaults to 6.
-      var i = float( v );
+      var i = _float( v );
       var p = ( o.precision == null ) ? 5 : o.precision;
       if ( Math.abs( i ) >= Math.pow( 10, p || 1 ) ) {
         // exponential format
@@ -218,7 +218,7 @@
       if ( t === 'number' )
         return String.fromCharCode( v );
       if ( t === 'string' )
-        return v[0];
+        return v.charAt(0);
       throw "%c requires number or string";
     },
 
@@ -269,7 +269,7 @@
     var res = '';
     var a = 0;
     for ( var i=0; i<subject.length; i++ ) {
-      var chr = subject[i];
+      var chr = subject.charAt(i);
       if ( chr == '%' ) {
 
         var m = CHUNKER.exec( subject.substr( i ) );
@@ -280,13 +280,13 @@
           var value = m[1] ? args[0][ m[1] ] : args[ a ],
               o = {
                 type      : m[6].toLowerCase(),
-                alt       : has( m[2], '#' ),
-                padleft   : has( m[2], '-' ),
-                space     : has( m[2], ' ' ),
-                sign      : has( m[2], '+' ),
-                // zero      : has( m[2], '0' ) && !has( m[2], '-' ),
-                pad       : has( m[2], '0' ) && !has( m[2], '-' ) ? '0' : ' ',
-                lenmod    : m[5] ? int( m[5] ) : ''
+                alt       : _has( m[2], '#' ),
+                padleft   : _has( m[2], '-' ),
+                space     : _has( m[2], ' ' ),
+                sign      : _has( m[2], '+' ),
+                // zero      : _has( m[2], '0' ) && !_has( m[2], '-' ),
+                pad       : _has( m[2], '0' ) && !_has( m[2], '-' ) ? '0' : ' ',
+                lenmod    : m[5] ? _int( m[5] ) : ''
               };
 
           // move to next item in args if not working by key lookup or printing a %
@@ -301,9 +301,9 @@
             o.minwidth = args[ a++ ];
           }
           else if ( m[3] ) {
-            o.minwidth = int( m[3] );
+            o.minwidth = _int( m[3] );
           }
-          if ( o.minwidth && has( m[2], '-' ) ) {
+          if ( o.minwidth && _has( m[2], '-' ) ) {
             o.minwidth = -o.minwidth;
           }
 
@@ -316,7 +316,7 @@
             o.precision = args[ a++ ];
           }
           else if ( m[4] ) {
-            o.precision = int( m[4].substr(1) ) || 0;
+            o.precision = _int( m[4].substr(1) ) || 0;
           }
 
           // conversion function
